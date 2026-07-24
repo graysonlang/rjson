@@ -1,0 +1,63 @@
+{
+  "name": "@graysonlang/rjson",
+  "version": "1.0.0",
+  "description": "Relaxed JSON parser for standard JSON plus comments and trailing commas.",
+  "keywords": [
+    "json",
+    "relaxed-json",
+    "comments",
+    "trailing-commas",
+    "config",
+    "parser"
+  ],
+  "homepage": "https://github.com/graysonlang/rjson#readme",
+  "bugs": {
+    "url": "https://github.com/graysonlang/rjson/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graysonlang/rjson.git"
+  },
+  "license": "MIT",
+  "author": "Grayson Lang",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/rjson.d.ts",
+      "default": "./src/rjson.js"
+    }
+  },
+  "main": "./src/rjson.js",
+  "types": "./src/rjson.d.ts",
+  "files": [
+    "src/rjson.js",
+    "src/rjson.d.ts"
+  ],
+  "scripts": {
+    "prepare": "node ./scripts/build.mjs --sync-launch",
+    "ports": "node ./scripts/build.mjs --print-port",
+    "sync:launch": "node ./scripts/build.mjs --sync-launch",
+    "build": "node ./scripts/build.mjs --lint --minify",
+    "test": "node ./scripts/test.mjs",
+    "deploy-test": "node ./scripts/pack-test.mjs",
+    "serve": "node ./scripts/build.mjs --lint --sourcemap --watch --serve --debug-port=auto",
+    "dev": "npm run serve -- --proxy --launch",
+    "vscode:build": "npm run build -- --vscode",
+    "vscode:debug": "npm run serve -- --vscode",
+    "lint": "eslint . --ignore-pattern '{dist,www}/**'"
+  },
+  "devDependencies": {
+    "@graysonlang/esp": "^1.7.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^9.39.4",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}

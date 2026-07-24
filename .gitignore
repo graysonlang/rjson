@@ -1,0 +1,6 @@
+.DS_Store
+/.vscode/launch.json
+node_modules/
+out/
+www/
+*.tgz
