@@ -146,6 +146,22 @@ toJson('{ "a": 1, /* c */ }', { preserveOffsets: true });
 - leading or doubled commas
 - macros, imports, and include directives
 
+## Relation to JSONC and JSON5
+
+JSONC is JSON with comments, the dialect VS Code uses for `settings.json` and TypeScript uses for `tsconfig.json`. It has no formal specification; the reference implementation is [`jsonc-parser`](https://www.npmjs.com/package/jsonc-parser).
+
+rjson accepts the same language as JSONC with trailing commas enabled. Across 78 inputs covering both comment styles, comments interacting with strings and escapes, trailing and stray commas, number and string forms, and malformed input, no difference in accept or reject, or in the parsed value, was found against `jsonc-parser` 3.3.1 run with `allowTrailingComma: true`.
+
+The differences are in behaviour rather than in what is accepted:
+
+- Trailing commas are always accepted here. In `jsonc-parser` they are opt-in through `allowTrailingComma`, which is off by default, so its out-of-the-box behaviour rejects `{ "a": 1, }`.
+- Invalid input throws here. `jsonc-parser` is error-tolerant and returns a best-effort value alongside a list of errors, so `{ key: 1, "b": 2 }` yields `{ "b": 2 }` and three errors. Code that does not inspect that list silently loses the malformed member.
+- `jsonc-parser` is the larger tool, with a scanner, a syntax tree, and edit and format operations. rjson is a dependency-free parser plus the source-to-source `toJson`, including its offset-preserving mode.
+
+JSON5 is a much wider dialect, and rjson is intentionally not it. On top of the comments and trailing commas allowed here, JSON5 also accepts unquoted object keys, single-quoted strings, strings continued across lines with a trailing backslash, hex numbers, numbers with a leading or trailing decimal point, numbers with an explicit plus sign, and `NaN` and `Infinity`. All of those are rejected here.
+
+Not everything under [Still rejected](#still-rejected) is a point of difference with JSON5, though: `undefined`, JavaScript expressions, nested block comments of the same style, and leading or doubled commas are rejected by JSON5 as well.
+
 ## API
 
 ```ts
