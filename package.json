@@ -1,6 +1,6 @@
 {
   "name": "@graysonlang/rjson",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Relaxed JSON parser for standard JSON plus comments and trailing commas.",
   "keywords": [
     "json",
@@ -47,10 +47,10 @@
     "lint": "eslint . --ignore-pattern '{dist,www}/**'"
   },
   "devDependencies": {
-    "@graysonlang/esp": "^1.7.1",
+    "@graysonlang/esp": "^1.8.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "esbuild": "^0.28.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.8.0",
     "typescript": "^5.8.0"
   },
   "engines": {
