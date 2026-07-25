@@ -35,7 +35,10 @@ try {
 
   check('tarball contents are src/ + metadata only', () => {
     const listing = run('tar', ['-tzf', tarball]);
-    const entries = listing.trim().split('\n').map(l => l.replace(/^package\//, ''));
+    const entries = listing
+      .trim()
+      .split('\n')
+      .map(l => l.replace(/^package\//, ''));
     if (!entries.includes('src/rjson.js')) throw new Error('src/rjson.js missing');
     if (!entries.includes('src/rjson.d.ts')) throw new Error('src/rjson.d.ts missing');
     const stray = entries.filter(

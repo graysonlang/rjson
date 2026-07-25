@@ -88,7 +88,6 @@ function escapeHtml(text) {
   return text.replace(/[&<>]/gu, ch => HTML_ESCAPES[ch]);
 }
 
-
 function setStatus(label, tone) {
   status.textContent = label;
   status.className = `status ${tone}`;

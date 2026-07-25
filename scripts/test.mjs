@@ -51,7 +51,9 @@ assert.deepEqual(parse('{\n/* line one\n   line two\n   line three */\n"a": 1\n}
 
 // A line comment inside a block comment.
 assert.deepEqual(parse('{ /* contains // marker */ "a": 1 }'), { a: 1 });
-assert.deepEqual(parse('{\n/* block\n   // line marker inside\n   still block */\n"a": 1\n}'), { a: 1 });
+assert.deepEqual(parse('{\n/* block\n   // line marker inside\n   still block */\n"a": 1\n}'), {
+  a: 1,
+});
 
 // A block comment inside a line comment. The */ does not terminate anything,
 // and the /* does not open anything, so the newline still ends the comment.
@@ -78,8 +80,12 @@ assert.deepEqual(parse('{ "a": "/* also not */" }'), { a: '/* also not */' });
 assert.deepEqual(parse('{ "a": "unclosed /* block" }'), { a: 'unclosed /* block' });
 
 // An escaped quote does not end the string, so markers after it stay data.
-assert.deepEqual(parse(String.raw`{ "a": "esc \" // still string" }`), { a: 'esc " // still string' });
-assert.deepEqual(parse(String.raw`{ "a": "esc \" /* still */ string" }`), { a: 'esc " /* still */ string' });
+assert.deepEqual(parse(String.raw`{ "a": "esc \" // still string" }`), {
+  a: 'esc " // still string',
+});
+assert.deepEqual(parse(String.raw`{ "a": "esc \" /* still */ string" }`), {
+  a: 'esc " /* still */ string',
+});
 
 // An escaped backslash does end the string - the quote after it is real.
 assert.deepEqual(parse(String.raw`{ "a": "back \\", "b": 1 }`), { a: 'back \\', b: 1 });
@@ -95,7 +101,9 @@ const uSlash = '\\u002f';
 const uQuote = '\\u0022';
 assert.deepEqual(parse(`{ "a": "${uSlash}${uSlash} unicode" }`), { a: '// unicode' });
 assert.deepEqual(parse(`{ "a": "${uQuote} not a terminator" }`), { a: '" not a terminator' });
-assert.deepEqual(parse(`{ "a": "${uSlash}* not a comment *${uSlash}" }`), { a: '/* not a comment */' });
+assert.deepEqual(parse(`{ "a": "${uSlash}* not a comment *${uSlash}" }`), {
+  a: '/* not a comment */',
+});
 assert.deepEqual(parse(String.raw`{ "a\/b": 1 }`), { 'a/b': 1 });
 
 // Quotes inside comments are text, and cannot open a string.
@@ -168,7 +176,7 @@ assert.equal(stripTrailingCommas('{ "a": 1, /* c */ }'), '{ "a": 1, /* c */ }');
 // --- rejections ------------------------------------------------------------
 
 assert.throws(() => parse('{ key: 1 }'), SyntaxError);
-assert.throws(() => parse('{ \'key\': 1 }'), SyntaxError);
+assert.throws(() => parse("{ 'key': 1 }"), SyntaxError);
 assert.throws(() => parse('{ "value": NaN }'), SyntaxError);
 assert.throws(() => parse('{ "x": 0x10 }'), SyntaxError);
 assert.throws(() => parse('{ "a": undefined }'), SyntaxError);
@@ -183,7 +191,7 @@ for (const bad of [null, undefined, 1, {}, []]) {
 
 // --- misc ------------------------------------------------------------------
 
-assert.equal(parse('{ "n": 1 }', (key, value) => key === 'n' ? 2 : value).n, 2);
+assert.equal(parse('{ "n": 1 }', (key, value) => (key === 'n' ? 2 : value)).n, 2);
 assert.deepEqual(parse('1'), 1);
 assert.deepEqual(parse('"s"'), 's');
 assert.deepEqual(parse('null'), null);
